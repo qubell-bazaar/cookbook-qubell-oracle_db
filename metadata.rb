@@ -1,9 +1,9 @@
 name              'oracle_db'
-maintainer        'GridDynamics'
-maintainer_email  'nyurin@griddynamics.com'
+maintainer        'Qubell'
+maintainer_email  'abutovich@qubell.com'
 license           'Apache 2.0'
 description       'Installs Oracle Database XE.'
-version           '0.1.0'
+version           '0.1.1'
 
 %w{ centos }.each do |os|
   supports os

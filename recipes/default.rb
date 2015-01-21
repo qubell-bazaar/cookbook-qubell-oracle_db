@@ -64,23 +64,14 @@ template "#{node[:oracle_db][:tmp_dir]}/xe.rsp" do
 	variables(node[:oracle_db][:xe_config])
 	mode 00755
 end
-case node[:platform]
-  when "redhat"
-    yum_package "oracle-xe-11.2.0-1.0" do
-      source "#{node[:oracle_db][:tmp_dir]}/Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm"
-      retries 5
-      action :install
-      options "--nogpgcheck"
-      not_if { File.directory?("/u01/app/oracle") }
-    end
-  when "centos", "amazon"
-    yum_package "oracle-xe-11.2.0-1.0" do
-      source "#{node[:oracle_db][:tmp_dir]}/Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm"
-      retries 5
-      action :install
-      not_if { File.directory?("/u01/app/oracle") }
-    end
-  end
+
+yum_package "oracle-xe-11.2.0-1.0" do
+  source "#{node[:oracle_db][:tmp_dir]}/Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm"
+  retries 5
+  action :install
+  options "--nogpgcheck" if !platform?("centos")
+  not_if { File.directory?("/u01/app/oracle") }
+end
 
 execute "Configuring OracleDB" do
 	command "service oracle-xe configure responseFile=#{node[:oracle_db][:tmp_dir]}/xe.rsp >> #{node[:oracle_db][:log_file]}"
